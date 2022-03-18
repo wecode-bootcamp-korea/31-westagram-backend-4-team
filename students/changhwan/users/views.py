@@ -1,6 +1,5 @@
 import json
 import re
-# from django.shortcuts import render
 
 from django.http            import JsonResponse
 from django.views           import View
@@ -25,9 +24,9 @@ class SignUpView(View, Validation):
             validation.validate_password(password)
 
             if User.objects.filter(email=email).exists():
-                return JsonResponse({'message':'Your email already exists'}, status=400)
+                return JsonResponse({'message':'Your email is already exists'}, status=400)
 
-            user = User.objects.create(
+            User.objects.create(
                 name         = name,
                 email        = email,
                 password     = password,
