@@ -6,10 +6,9 @@ from django.views           import View
 from django.core.exceptions import ValidationError
 
 from users.models           import User
-from users.validations      import Validation
+from users.validations      import validate_email, validate_password
 
-# Create your views here.
-class SignUpView(View, Validation):
+class SignUpView(View):
     def post(self, request):
         try:
             data         = json.loads(request.body)
@@ -18,10 +17,8 @@ class SignUpView(View, Validation):
             password     = data['password']
             phone_number = data['phone_number']
 
-            validation = Validation()
-
-            validation.validate_email(email)
-            validation.validate_password(password)
+            validate_email(email)
+            validate_password(password)
 
             if User.objects.filter(email=email).exists():
                 return JsonResponse({'message':'Your email is already exists'}, status=400)
@@ -36,7 +33,7 @@ class SignUpView(View, Validation):
             return JsonResponse({'message':'SUCCESS'}, status=201)
 
         except KeyError:
-            return JsonResponse({'error':'KeyError'}, status=400)
+            return JsonResponse({'message':'KeyError'}, status=400)
 
         except ValidationError as e:
             return JsonResponse({'message':(e.message)}, status=400)
