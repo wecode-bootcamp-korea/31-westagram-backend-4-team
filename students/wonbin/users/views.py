@@ -30,4 +30,4 @@ class SignupView(View):
         except KeyError:
             return JsonResponse({"message":"KEY_ERROR"}, status=400)
         except IntegrityError:
-            return JsonResponse({"message":"중복된 이메일입니다."}, status=400)
+            return JsonResponse({"message":"This email already exists.."}, status=400)
