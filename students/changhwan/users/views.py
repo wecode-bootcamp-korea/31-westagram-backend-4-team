@@ -54,7 +54,7 @@ class SignInView(View):
             if not password_exist:
                 return JsonResponse({"message":"INVALID_PASSWORD"}, status=401)
 
-            return JsonResponse({'message':'SUCCESS'}, status=201)
+            return JsonResponse({'message':'SUCCESS'}, status=200)
 
         except KeyError:
             return JsonResponse({'message':'KeyError'}, status=400) 
