@@ -3,7 +3,6 @@ import json
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views import View
-from django.core.exceptions import ObjectDoesNotExist
 
 from .models import User
 from .validator import email_validate, password_validate, phone_number_validate
@@ -43,12 +42,12 @@ class SigninView(View):
             email_validate(email)
             password_validate(password)
              
-            if not User.objects.get(email = email).password == password:
+            if User.objects.get(email = email).password != password:
                 return JsonResponse({"message": "INVALID_USER"}, status = 401)
                 
             return JsonResponse({"message": "success"}, status = 200)
                 
         except KeyError:
             return JsonResponse({"message":"KEY_ERROR"}, status=400)
-        except ObjectDoesNotExist:
+        except User.DoesNotExist:
             return JsonResponse({"message": "INVALID_USER"}, status = 401)
