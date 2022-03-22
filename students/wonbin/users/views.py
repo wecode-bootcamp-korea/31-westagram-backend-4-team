@@ -1,11 +1,11 @@
 import json, bcrypt, jwt
 
-from django.db import IntegrityError
-from django.http import JsonResponse
+from django.db    import IntegrityError
+from django.http  import JsonResponse
 from django.views import View
+from django.conf  import settings
 
-from .models import User
-from  westagram.settings import SECRET_KEY, ALGORITHM
+from .models    import User
 from .validator import email_validate, password_validate, phone_number_validate
 
 class SignupView(View):
@@ -49,7 +49,7 @@ class SigninView(View):
             if not bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
                 return JsonResponse({"message": "INVALID_USER"}, status = 401)
             
-            access_token = jwt.encode({"id": user.id}, SECRET_KEY, algorithm = ALGORITHM)
+            access_token = jwt.encode({"id": user.id}, settings.SECRET_KEY, algorithm = settings.ALGORITHM)
             return JsonResponse({"token": access_token}, status = 200)
                 
         except KeyError:
