@@ -41,14 +41,11 @@ class SignUpView(View):
 class SignInView(View):
     def post(self, request):
         try:
-            data           = json.loads(request.body)
-            email          = data['email']
-            password       = data['password']
+            data     = json.loads(request.body)
+            email    = data['email']
+            password = data['password']
 
-            if not User.objects.filter(email=email).exists():
-                return JsonResponse({"message":"INVALID_USER"}, status=401)
-
-            if not User.objects.get(email=email).password == password:
+            if not User.objects.filter(email=email, password=password).exists():
                 return JsonResponse({"message":"INVALID_USER"}, status=401)
 
             return JsonResponse({'message':'SUCCESS'}, status=200)
